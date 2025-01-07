@@ -1,0 +1,51 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+
+
+model Users {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  username String   @unique
+  password String
+  money    Int      @default(0)
+
+  organisedEvents Events[]   // One-to-many relation
+  bookings        Bookings[] // One-to-many relation
+}
+
+model Events {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  title         String
+  venue         String
+  time          DateTime //start
+  endTime       DateTime
+  price         Int
+  totalCapacity Int
+  fundTotal     Int      @default(0)
+
+  organiserId   String   @db.ObjectId
+  organiser     Users    @relation(fields: [organiserId], references: [id])
+
+  bookings      Bookings[]
+}
+
+model Bookings {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  eventId  String   @db.ObjectId
+  event    Events   @relation(fields: [eventId], references: [id])
+
+  userId   String   @db.ObjectId
+  user     Users    @relation(fields: [userId], references: [id])
+}
