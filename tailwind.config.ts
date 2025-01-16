@@ -8,9 +8,9 @@ export default {
   ],
   theme: {
     extend: {
-      colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+      fontFamily: {
+        rubikVinyl: ['var(--font-rubik-vinyl)', 'cursive'],
+        rubikStatic: ['var(--font-rubik-static)', 'sans-serif'],
       },
     },
   },
